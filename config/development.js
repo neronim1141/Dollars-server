@@ -10,7 +10,7 @@ module.exports = {
   },
 
   mongo: {
-    uri: process.env.MONGODB_DB_URL || 'mongodb://localhost/dollars',
+    uri: process.env.MONGODB_DB_URL || 'mongodb://neronim66:Himitsu1&@testcluster-shard-00-00-isjwh.mongodb.net:27017,testcluster-shard-00-01-isjwh.mongodb.net:27017,testcluster-shard-00-02-isjwh.mongodb.net:27017/test?ssl=true&replicaSet=TestCluster-shard-0&authSource=admin',
     options: {
       useMongoClient: true
     },
