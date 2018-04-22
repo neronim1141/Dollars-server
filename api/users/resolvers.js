@@ -6,12 +6,22 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config');
 
 //#region Read object
-module.exports.getOne = (parentValue, args) => {
+module.exports.getOne = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  } else if (context.user.role != 'admin') {
+    return new Error('must be admin');
+  }
   return User.findByIdAsync(args.id, 'id login role email').then(res => {
     return res;
   });
 };
 module.exports.getList = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  } else if (context.user.role != 'admin') {
+    return new Error('must be admin');
+  }
   return User.findAsync({}, '', {
     limit: args.first || 0,
     skip: args.offset || 0
@@ -20,6 +30,11 @@ module.exports.getList = (parentValue, args, context) => {
   });
 };
 module.exports.getProfile = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  } else if (context.user.role != 'admin' || context.user._id != args.id) {
+    return new Error('must be this user or admin');
+  }
   if (!context.user) throw 'not logged';
   return User.findById(args.id).then(res => {
     return res;
@@ -28,13 +43,13 @@ module.exports.getProfile = (parentValue, args, context) => {
 //#endregion
 
 //#region Read fragments
-module.exports.getMessages = (parentValue, args) => {
+module.exports.getMessages = (parentValue, args, context) => {
   return Message.findAsync({ author: parentValue.id }, '', {
     limit: args.first || 0,
     skip: args.offset || 0
   }).then(res => res);
 };
-module.exports.getTopics = (parentValue, args) => {
+module.exports.getTopics = (parentValue, args, context) => {
   return Topic.findAsync({ author: parentValue.id }, '', {
     limit: args.first || 0,
     skip: args.offset || 0
@@ -43,7 +58,7 @@ module.exports.getTopics = (parentValue, args) => {
 //#endregion
 
 //#region Create Update Delete
-module.exports.createUser = (parentValue, args) => {
+module.exports.createUser = (parentValue, args, context) => {
   return new Promise((resolve, reject) => {
     var newUser = new User({
       login: args.login,
@@ -62,7 +77,12 @@ module.exports.createUser = (parentValue, args) => {
       });
   });
 };
-module.exports.updateUser = (parentValue, args) => {
+module.exports.updateUser = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  } else if (context.user.role != 'admin' || context.user._id != args.id) {
+    return new Error('must be this user or admin');
+  }
   return new Promise((resolve, reject) => {
     User.findByIdAndUpdateAsync(args.id, args)
       .then(res => {
@@ -76,7 +96,12 @@ module.exports.updateUser = (parentValue, args) => {
       });
   });
 };
-module.exports.deleteUser = (parentValue, args) => {
+module.exports.deleteUser = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  } else if (context.user.role != 'admin') {
+    return new Error('must be admin');
+  }
   return new Promise((resolve, reject) => {
     User.findById(args.id)
       .then(user => {
@@ -102,7 +127,7 @@ module.exports.deleteUser = (parentValue, args) => {
 //#endregion
 
 //#region authenticate
-module.exports.login = (parentValue, args) => {
+module.exports.login = (parentValue, args, context) => {
   return new Promise((resolve, reject) => {
     User.findOne({
       login: args.login.toLowerCase()
@@ -120,7 +145,6 @@ module.exports.login = (parentValue, args) => {
           if (!authenticated) {
             reject('This password is not correct.');
           } else {
-            if (config.mongo.debug.fields) console.log(user);
             let token = jwt.sign(
               { _id: user._id, role: user.role },
               config.secrets.session,

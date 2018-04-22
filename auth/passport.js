@@ -3,10 +3,10 @@ const User = require('../api/users/schema');
 var LocalStrategy = require('passport-local').Strategy;
 
 function localAuthenticate(login, password, done) {
+  console.log('te2st');
   User.findOne({
     login: login.toLowerCase()
   })
-    .populate('movies ratings reviews likes ')
     .then(function(user) {
       if (!user) {
         return done(null, false, {
@@ -31,7 +31,7 @@ function localAuthenticate(login, password, done) {
     });
 }
 
-exports.setup = function(User, config) {
+exports.setup = function(config) {
   passport.use(
     new LocalStrategy(
       {

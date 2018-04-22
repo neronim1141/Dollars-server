@@ -6,7 +6,7 @@ const Actions = {
 };
 module.exports.Actions = Actions;
 //#region Read object
-module.exports.getOne = (parentValue, args) => {
+module.exports.getOne = (parentValue, args, context) => {
   return Message.findById(args.id).then(res => {
     // console.log(res);
     return res;
@@ -24,13 +24,16 @@ module.exports.getList = (parentValue, args, context) => {
 //#endregion
 
 //#region Read fragments
-module.exports.getAuthor = (parentValue, args) => {
+module.exports.getAuthor = (parentValue, args, context) => {
   return User.findById(parentValue.author).then(res => res);
 };
 //#endregion
 
 //#region Create Update Delete
-module.exports.createMessage = (parentValue, args) => {
+module.exports.createMessage = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  }
   var newMessage = new Message({
     author: args.author,
     topic: args.topic,
@@ -47,7 +50,10 @@ module.exports.createMessage = (parentValue, args) => {
       return err;
     });
 };
-module.exports.updateMessage = (parentValue, args) => {
+module.exports.updateMessage = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  }
   return Message.findByIdAndUpdate(args.id, args)
     .then(res => {
       if (!res) throw 'not found';
@@ -59,7 +65,10 @@ module.exports.updateMessage = (parentValue, args) => {
       return err;
     });
 };
-module.exports.deleteMessage = (parentValue, args) => {
+module.exports.deleteMessage = (parentValue, args, context) => {
+  if (!context.user) {
+    return new Error('must be logged');
+  }
   var message = Message.findById(args.id).catch(err => {
     console.log(err);
     return err;
