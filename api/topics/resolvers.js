@@ -1,5 +1,6 @@
 const Message = require('../messages/schema');
 const Topic = require('../topics/schema');
+const User = require('../users/schema');
 
 //#region Read object
 module.exports.getOne = (parentValue, args) => {
@@ -27,7 +28,9 @@ module.exports.getMessages = (parentValue, args) => {
     skip: args.offset || 0
   }).then(res => res);
 };
-
+module.exports.getAuthor = (parentValue, args) => {
+  return User.findById(parentValue.author).then(res => res);
+};
 //#endregion
 
 //#region Create Update Delete

@@ -16,7 +16,10 @@ module.exports = new GraphQLObjectType({
     const UserType = require('../users/type');
     return {
       id: { type: GraphQLID },
-      author: { type: UserType },
+      author: {
+        type: UserType,
+        resolve: resolvers.getAuthor
+      },
       creationTime: {
         type: GraphQLString
       },

@@ -19,12 +19,6 @@ var MessageSchema = new Schema({
   message: { type: String }
 });
 
-var autoPopulate = function(next) {
-  this.populate('author');
-  next();
-};
-MessageSchema.pre('findOne', autoPopulate).pre('find', autoPopulate);
-
 exports.MessageSchema = MessageSchema;
 const Message = mongoose.model('Message', MessageSchema, 'Message');
 

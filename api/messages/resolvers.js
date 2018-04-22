@@ -1,4 +1,5 @@
 const Message = require('../messages/schema');
+const User = require('../users/schema');
 const pubsub = require('../subscriptions');
 const Actions = {
   NEW_MESSAGE: 'new Message'
@@ -23,7 +24,9 @@ module.exports.getList = (parentValue, args, context) => {
 //#endregion
 
 //#region Read fragments
-
+module.exports.getAuthor = (parentValue, args) => {
+  return User.findById(parentValue.author).then(res => res);
+};
 //#endregion
 
 //#region Create Update Delete

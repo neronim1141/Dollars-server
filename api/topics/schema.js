@@ -22,12 +22,6 @@ var TopicSchema = new Schema(
   }
 );
 
-var autoPopulate = function(next) {
-  this.populate('author');
-  next();
-};
-TopicSchema.pre('findOne', autoPopulate).pre('find', autoPopulate);
-
 const Topic = mongoose.model('Topic', TopicSchema, 'Topic');
 
 module.exports = Topic;

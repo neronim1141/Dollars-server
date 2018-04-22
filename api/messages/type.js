@@ -8,7 +8,7 @@ const {
   GraphQLID,
   GraphQlDate
 } = require('graphql');
-
+const resolvers = require('./resolvers');
 module.exports = new GraphQLObjectType({
   name: 'Message',
   fields: () => {
@@ -16,7 +16,10 @@ module.exports = new GraphQLObjectType({
 
     return {
       id: { type: GraphQLID },
-      author: { type: UserType },
+      author: {
+        type: UserType,
+        resolve: resolvers.getAuthor
+      },
       message: { type: GraphQLString },
       creationTime: {
         type: GraphQLString
