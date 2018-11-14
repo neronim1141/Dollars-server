@@ -31,9 +31,9 @@ module.exports.getAuthor = (parentValue, args, context) => {
 
 //#region Create Update Delete
 module.exports.createMessage = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  }
+  //if (!context.user) {
+  //  return new Error('must be logged');
+ // }
   var newMessage = new Message({
     author: args.author,
     topic: args.topic,
@@ -43,7 +43,11 @@ module.exports.createMessage = (parentValue, args, context) => {
   return newMessage
     .save((err, res) => {
       if (err) throw err;
-      pubsub.publish(Actions.NEW_MESSAGE, { messageAdded: newMessage });
+      pubsub.publish(Actions.NEW_MESSAGE,
+         { 
+           messageAdded: newMessage,
+           topicID:args.topic
+     });
     })
     .catch(err => {
       console.log(err);
@@ -51,9 +55,9 @@ module.exports.createMessage = (parentValue, args, context) => {
     });
 };
 module.exports.updateMessage = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  }
+ // if (!context.user) {
+ //   return new Error('must be logged');
+ // }
   return Message.findByIdAndUpdate(args.id, args)
     .then(res => {
       if (!res) throw 'not found';
@@ -66,9 +70,9 @@ module.exports.updateMessage = (parentValue, args, context) => {
     });
 };
 module.exports.deleteMessage = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  }
+  //if (!context.user) {
+  //  return new Error('must be logged');
+  //}
   var message = Message.findById(args.id).catch(err => {
     console.log(err);
     return err;

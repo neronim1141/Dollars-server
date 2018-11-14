@@ -32,17 +32,17 @@ server.listen(config.port, () => {
   console.log(
     `GraphQL Server is now running on http://localhost:${config.port}`
   );
-  new SubscriptionServer(
-    {
-      schema,
-      execute,
-      subscribe,
-      onConnect: () => {
-        if (config.env == 'development') console.log('Client connected');
-      }
-    },
-    { server, path: '/subscriptions' }
-  );
+ new SubscriptionServer(
+   {
+     schema,
+     execute,
+     subscribe,
+     onConnect: () => {
+       if (config.env == 'development') console.log('Client connected');
+     }
+   },
+   { server, path: '/subscriptions' }
+ );
 });
 server.on('error', onError);
 server.on('listening', onListening);

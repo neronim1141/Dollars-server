@@ -10,7 +10,7 @@ module.exports = {
   },
 
   mongo: {
-    uri: process.env.MONGODB_DB_URL || 'mongodb://localhost:27017/chatapp',
+    uri: "mongodb://admin:helloThere@devcluster-shard-00-00-isjwh.mongodb.net:27017,devcluster-shard-00-01-isjwh.mongodb.net:27017,devcluster-shard-00-02-isjwh.mongodb.net:27017/test?ssl=true&replicaSet=DevCluster-shard-0&authSource=admin&retryWrites=true" || 'mongodb://localhost:27017/chatapp',
     options: {
       useMongoClient: true
     },

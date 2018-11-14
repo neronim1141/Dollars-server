@@ -7,21 +7,21 @@ const config = require('../../config');
 
 //#region Read object
 module.exports.getOne = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  } else if (context.user.role != 'admin') {
-    return new Error('must be admin');
-  }
+ // if (!context.user) {
+ //   return new Error('must be logged');
+ // } else if (context.user.role != 'admin') {
+ //   return new Error('must be admin');
+  //}
   return User.findByIdAsync(args.id, 'id login role email').then(res => {
     return res;
   });
 };
 module.exports.getList = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  } else if (context.user.role != 'admin') {
-    return new Error('must be admin');
-  }
+ // if (!context.user) {
+//    return new Error('must be logged');
+ // } else if (context.user.role != 'admin') {
+ //   return new Error('must be admin');
+//  }
   return User.findAsync({}, '', {
     limit: args.first || 0,
     skip: args.offset || 0
@@ -30,12 +30,12 @@ module.exports.getList = (parentValue, args, context) => {
   });
 };
 module.exports.getProfile = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  } else if (context.user.role != 'admin' || context.user._id != args.id) {
-    return new Error('must be this user or admin');
-  }
-  if (!context.user) throw 'not logged';
+ // if (!context.user) {
+ //   return new Error('must be logged');
+ // } else if (context.user.role != 'admin' || context.user._id != args.id) {
+ //   return new Error('must be this user or admin');
+ // }
+ // if (!context.user) throw 'not logged';
   return User.findById(args.id).then(res => {
     return res;
   });
@@ -72,22 +72,22 @@ module.exports.createUser = (parentValue, args, context) => {
         resolve(res);
       })
       .catch(err => {
-        if (config.mongo.debug.errors) console.log(err);
+        //if (config.mongo.debug.errors) console.log(err);
         reject(err);
       });
   });
 };
 module.exports.updateUser = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  } else if (context.user.role != 'admin' || context.user._id != args.id) {
-    return new Error('must be this user or admin');
-  }
+  //if (!context.user) {
+  //  return new Error('must be logged');
+  //} else if (context.user.role != 'admin' || context.user._id != args.id) {
+ //   return new Error('must be this user or admin');
+  //}
   return new Promise((resolve, reject) => {
     User.findByIdAndUpdateAsync(args.id, args)
       .then(res => {
         if (!res) throw 'not found';
-        if (config.mongo.debug.fields) console.log({ update: res });
+       // if (config.mongo.debug.fields) console.log({ update: res });
         resolve({ res, ...args });
       })
       .catch(err => {
@@ -97,11 +97,11 @@ module.exports.updateUser = (parentValue, args, context) => {
   });
 };
 module.exports.deleteUser = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  } else if (context.user.role != 'admin') {
-    return new Error('must be admin');
-  }
+ // if (!context.user) {
+ //   return new Error('must be logged');
+  //} else if (context.user.role != 'admin') {
+ //   return new Error('must be admin');
+ // }
   return new Promise((resolve, reject) => {
     User.findById(args.id)
       .then(user => {
@@ -114,12 +114,12 @@ module.exports.deleteUser = (parentValue, args, context) => {
             resolve(res);
           })
           .catch(err => {
-            if (config.mongo.debug.errors) console.log(err);
+           // if (config.mongo.debug.errors) console.log(err);
             reject(err);
           });
       })
       .catch(err => {
-        if (config.mongo.debug.errors) console.log(err);
+        //if (config.mongo.debug.errors) console.log(err);
         reject(err);
       });
   });

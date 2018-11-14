@@ -32,16 +32,16 @@ let RootMutation = new GraphQLObjectType({
   })
 });
 let RootSubscription = new GraphQLObjectType({
-  name: 'Subscription',
-  fields: () => ({
-    ...Message.subscriptions
-  })
+ name: 'Subscription',
+ fields: () => ({
+   ...Message.subscriptions
+ })
 });
 
 const schema = new GraphQLSchema({
   query: RootQuery,
   mutation: RootMutation,
-  subscription: RootSubscription
+ subscription: RootSubscription
 });
 
 module.exports = schema;

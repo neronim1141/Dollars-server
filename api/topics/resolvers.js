@@ -35,9 +35,9 @@ module.exports.getAuthor = (parentValue, args, context) => {
 
 //#region Create Update Delete
 module.exports.createTopic = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  }
+ // if (!context.user) {
+ //   return new Error('must be logged');
+ // }
   var newTopic = new Topic({ author: args.author, title: args.title });
 
   return newTopic
@@ -50,9 +50,9 @@ module.exports.createTopic = (parentValue, args, context) => {
     });
 };
 module.exports.updateTopic = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  }
+ // if (!context.user) {
+ //   return new Error('must be logged');
+  //}
   return Topic.findByIdAndUpdate(args.id, args)
     .then(res => {
       if (!res) throw 'not found';
@@ -65,9 +65,9 @@ module.exports.updateTopic = (parentValue, args, context) => {
     });
 };
 module.exports.deleteTopic = (parentValue, args, context) => {
-  if (!context.user) {
-    return new Error('must be logged');
-  }
+ // if (!context.user) {
+ //   return new Error('must be logged');
+ // }
   var topic = Topic.findById(args.id).catch(err => {
     console.log(err);
     return err;
